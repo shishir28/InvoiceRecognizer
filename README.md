@@ -2,14 +2,11 @@
 
 ## Introduction
 
-MAUI based App For Real Estate space. It is being developed to learn MAUI and its features.
+Demo Application which read data from various pdf invoices using custom model of Azure Form Recognizer
 
 ## Tech Stack
 
-- MAUI
-- CQRS
-- WebAPI
-- Fitness Function
+- .Net Core
 
 ## Architecture Overview
 
@@ -27,5 +24,3 @@ MAUI based App For Real Estate space. It is being developed to learn MAUI and it
 ### Running
 
 - Inside root folder run following command
-
-  - docker-compose -f ./docker-compose.yml -f ./docker-compose.override.yml up --build

@@ -1,7 +1,7 @@
 ﻿using Spectre.Console;
 using System.Reflection;
 
-namespace InvoiceGenrator
+namespace InvoiceGenerator
 {
     public class Helper
     {
@@ -9,13 +9,15 @@ namespace InvoiceGenrator
         public string selectedFormat { get; set; }
         public string CwdPath { get; set; }
         public string TemplatePath { get; set; }
+        public string BaseToolPath { get; set; }
+
 
         public Helper()
         {
             CwdPath = Directory.GetCurrentDirectory();
-            string toolRoot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string baseToolPath = new Uri(toolRoot + "/../../../").LocalPath;
-            TemplatePath = Path.Combine(baseToolPath, "PDF-Templates");
+            var toolRoot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            BaseToolPath = new Uri(toolRoot + "/../../../").LocalPath;
+            TemplatePath = Path.Combine(BaseToolPath, "PDF-Templates");
         }
 
 
@@ -33,22 +35,6 @@ namespace InvoiceGenrator
                 }));
         }
 
-        public static void CreateFile(string path, string templatePath, string fileName)
-        {
-            var dest = Path.Combine(path, fileName);
-            var src = Path.Combine(templatePath, fileName);
-            AnsiConsole.MarkupLine(string.Format("LOG: Creating {0} ...", fileName));
-            if (File.Exists(dest))
-            {
-                Warning(string.Format("IGNORE: File already exist"));
-            }
-            else
-            {
-                File.Copy(src, dest);
-                Success(string.Format("CREATED: File '{0}' created", fileName));
-            }
-        }
-
         private void ProcessUserInput()
         {
             AnsiConsole.Status()
@@ -56,10 +42,11 @@ namespace InvoiceGenrator
             {
                 if (answerInvoice)
                 {
-
-                    CreateFile(CwdPath, TemplatePath, "README.md");
+                    if (selectedFormat == "Xero")
+                        ProcessXeroData();
+                    
                     Thread.Sleep(1000);
-                    ctx.Status("Next task");
+                    ctx.Status("Generating Xero Invoice");
                     ctx.Spinner(Spinner.Known.Star);
                     ctx.SpinnerStyle(Style.Parse("green"));
                 }
@@ -67,9 +54,16 @@ namespace InvoiceGenrator
             AnsiConsole.MarkupLine("All Good now. Press any key to continue....");
         }
 
+        private void ProcessXeroData()
+        {
+            var invoices = ExcelDataReader.ReadInvoicesFromExcel(Path.Combine(BaseToolPath, "Data", "Xero-Data.xlsx"));
+            XeroInvoiceGenerator.GenerateDocuments(invoices,TemplatePath);
+
+        }
+
         private static void WriteHeader(string header) => AnsiConsole.Write(
             new FigletText(header)
-                .Color(Color.Red));
+                .Color(Color.Green));
 
         private static void Success(string success) => Write(success, "green");
         private static void Warning(string warning) => Write(warning, "yellow");

@@ -1,3 +1,2 @@
-﻿
-var helper = new InvoiceGenerator.Helper();
+﻿var helper = new InvoiceGenerator.Helper();
 helper.RunProgram();

@@ -1,23 +1,19 @@
-# RealEstateApp
+# Invoice Recongzier
 
 ## Introduction
 
-Demo Application which read data from various pdf invoices using custom model of Azure Form Recognizer
+Demonstration application on top of Azure Cognitive Services that utilizes a personalized extraction model from Azure Form Recognizer to extract data from diverse PDF invoices, enabling client applications to make use of this functionality for their own purposes.
 
 ## Tech Stack
 
 - .Net Core
 - Python
+- Node
 
 ## Architecture Overview
 
 ### Tools
 
 - [Visual Studio Code](https://code.visualstudio.com/Download/)
-- [.Net Core 7 ](https://dotnet.microsoft.com/download/dotnet-core)
 
 ### Housekeeping
-
-### Running
-
-- Inside root folder run following command
